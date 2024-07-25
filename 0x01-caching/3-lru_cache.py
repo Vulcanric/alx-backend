@@ -45,7 +45,7 @@ class LRUCache(base_caching.BaseCaching):
                         lru = k  # lru = least recently accessed
 
                 # lru is found! Uncomment the next line to see process flow
-                print(self.track_access, lru, 'is the least recently used')
+                # print(self.track_access, lru, 'is the least recently used')
                 self.cache_data.pop(lru)
                 self.track_access.pop(lru)
                 print(f"DISCARD: {lru}")

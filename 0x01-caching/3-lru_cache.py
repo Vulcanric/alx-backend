@@ -13,7 +13,7 @@ class LRUCache(base_caching.BaseCaching):
     """
     # Track the time (order) in which data was accessed
     track_access = {}  # ex: {'A': least, 'B': recent, 'C': most recent}
-    time = 0
+    time = 1
 
     def __init__(self):
         """ Instantiate caching system object """
@@ -34,23 +34,25 @@ class LRUCache(base_caching.BaseCaching):
         """
         if key and item:
             self.cache_data[key] = item
+
+            if len(self.cache_data.keys()) > self.MAX_ITEMS:
+                keys = list(self.track_access.keys())
+                lru = keys[0]
+
+                # Find the data with the least time/order
+                for k in keys:
+                    if self.track_access[lru] > self.track_access[k]:
+                        lru = k  # lru = least recently accessed
+
+                # lru is found! Uncomment the next line to see process flow
+                print(self.track_access, lru, 'is the least recently used')
+                self.cache_data.pop(lru)
+                self.track_access.pop(lru)
+                print(f"DISCARD: {lru}")
+
+            # Item is either updated or inserted (accessed), track time!
             self.track_access[key] = self.time
             self.time += 1
-
-        if len(self.cache_data.keys()) > self.MAX_ITEMS:
-            keys = list(self.track_access.keys())
-            lru = keys[0]
-
-            # Find the data with the least time/order
-            for key in keys:
-                if self.track_access[lru] > self.track_access[key]:
-                    lru = key  # lru = least
-
-            # lru is found! Uncomment the next line to see full process flow
-            # print(self.track_access, lru, 'is the least recently used')
-            self.cache_data.pop(lru)
-            self.track_access.pop(lru)
-            print(f"DISCARD: {lru}")
 
     def get(self, key):
         """ Retrieves an item from cache by its key.
@@ -62,5 +64,8 @@ class LRUCache(base_caching.BaseCaching):
             Item's value or none if key doesn't exist
         """
         if key in self.cache_data.keys():
+            # Item is accessed, track time!
+            self.track_access[key] = self.time
+            self.time += 1
             return self.cache_data.get(key)
         return None

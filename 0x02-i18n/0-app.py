@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+""" Basic Flask app """
+from flask import (
+        Flask,
+        render_template
+    )
+
+
+if __name__ == "__main__":
+    app = Flask(__name__)
+
+    @app.route('/')
+    def hello_world() -> None:
+        """ Bind function """
+        render_template('templates/0-index.html')
+
+    app.run()

@@ -1,7 +1,7 @@
 // Connects to the Redis server running on localhost
 import { createClient } from 'redis';
 
-const client = createClient();
+const client = await createClient();
 
 client.on('error', (err) => {
   console.log('Redis client not connected to the server:', err);
